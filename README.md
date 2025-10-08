@@ -62,6 +62,7 @@ The project follows a **client-server architecture**:
 ├── client_admin.py        # CLI client for admins
 ├── registrar.db           # SQLite database
 └── README.md              # Project documentation
+```
 
 ---
 
