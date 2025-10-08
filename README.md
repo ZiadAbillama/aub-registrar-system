@@ -72,16 +72,19 @@ Follow these steps to run the AUB Registrar System on your machine:
 git clone https://github.com/YourUsername/aub-registrar-system.git  
 cd aub-registrar-system
 
-**2. Check that Python 3 is installed**  
+**2. Install dependencies**  
+pip install -r requirements.txt
+
+**3. Check that Python 3 is installed**  
 python --version
 
-**3. Start the server**  
+**4. Start the server**  
 python server.py 65432
 
-**4. Launch the GUI client**  
+**5. Launch the GUI client**  
 python registrar_gui.py
 
-**5. (Optional) Run CLI clients**  
+**6. Run CLI clients**  
 python client_student.py 65432  
 python client_admin.py 65432
 
