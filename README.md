@@ -95,6 +95,7 @@ Make sure all files (server.py, registrar_gui.py, client_student.py, client_admi
 
 ## 📚 Credits
 
-Developed by Ziad Abillama and William Nader
-📘 EECE 350 – Software Engineering
+Developed by Ziad Abillama and William Nader  
+📘 EECE 350 – Software Engineering  
 🏫 American University of Beirut – March 2025
+
