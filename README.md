@@ -54,7 +54,6 @@ The project follows a **client-server architecture**:
 
 ## 📁 Project Structure
 
-```bash
 📂 aub-registrar-system/
 ├── server.py              # Main server logic
 ├── registrar_gui.py       # GUI client
@@ -62,7 +61,6 @@ The project follows a **client-server architecture**:
 ├── client_admin.py        # CLI client for admins
 ├── registrar.db           # SQLite database
 └── README.md              # Project documentation
-```
 
 ---
 
@@ -70,7 +68,6 @@ The project follows a **client-server architecture**:
 
 Follow these steps to run the AUB Registrar System on your machine:
 
-```bash
 # 1. Clone the repository (or download the ZIP and extract it)
 git clone https://github.com/YourUsername/aub-registrar-system.git
 cd aub-registrar-system
@@ -89,5 +86,3 @@ python client_student.py 65432
 python client_admin.py 65432
 
 Make sure all files (server.py, registrar_gui.py, client_student.py, client_admin.py, and registrar.db) are in the same folder before running these commands.
-```
-
