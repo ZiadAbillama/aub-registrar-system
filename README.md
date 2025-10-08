@@ -69,7 +69,7 @@ The project follows a **client-server architecture**:
 Follow these steps to run the AUB Registrar System on your machine:  
 
 **1. Clone the repository (or download the ZIP and extract it)**  
-git clone https://github.com/YourUsername/aub-registrar-system.git
+git clone https://github.com/YourUsername/aub-registrar-system.git  
 cd aub-registrar-system
 
 **2. Check that Python 3 is installed**  
