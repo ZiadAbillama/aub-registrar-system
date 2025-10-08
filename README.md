@@ -89,3 +89,16 @@ python client_student.py 65432
 python client_admin.py 65432
 
 Make sure all files (server.py, registrar_gui.py, client_student.py, client_admin.py, and registrar.db) are in the same folder before running these commands.
+
+## 🎥 Demo
+
+### 🖥️ GUI Login
+![GUI Login](demo/gui_login.png)
+
+### 👨‍💼 Admin Dashboard
+![Admin Dashboard](demo/admin_dashboard.png)
+![Create Course](demo/create_course.png)
+![Input Error](demo/input_error.png)
+
+### 🎓 Student Dashboard
+![Student Dashboard](demo/student_dashboard.png)
