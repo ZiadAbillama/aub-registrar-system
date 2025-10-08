@@ -89,6 +89,7 @@ python client_student.py 65432
 python client_admin.py 65432
 
 Make sure all files (server.py, registrar_gui.py, client_student.py, client_admin.py, and registrar.db) are in the same folder before running these commands.
+```
 
 ---
 
