@@ -1,18 +1,12 @@
 import socket
 import json
 import sys
-import getpass # For securely getting password input
+import getpass 
 
-# --- Configuration ---
 SERVER_HOST = '127.0.0.1'
 BUFFER_SIZE = 4096
 
-# --- Helper Functions ---
-# Re-using the helper functions from the student client for consistency
-# (In a larger project, these might go into a shared utility module)
-
 def send_request(sock, action, data=None):
-    """Sends a JSON request to the server and returns the JSON response."""
     request = {"action": action, "data": data or {}}
     try:
         sock.sendall(json.dumps(request).encode('utf-8'))
@@ -38,7 +32,6 @@ def display_courses(courses, title="Courses"):
 
     headers = ["Name", "Schedule", "Capacity", "Remaining Seats"]
 
-    # Calculate column widths
     col_widths = {header: len(header) for header in headers}
     for course in courses:
         col_widths["Name"] = max(col_widths["Name"], len(str(course.get('name', 'N/A'))))
@@ -46,12 +39,10 @@ def display_courses(courses, title="Courses"):
         col_widths["Capacity"] = max(col_widths["Capacity"], len(str(course.get('capacity', 'N/A'))))
         col_widths["Remaining Seats"] = max(col_widths["Remaining Seats"], len(str(course.get('remaining_seats', 'N/A'))))
 
-    # Print header
     header_line = " | ".join(f"{h:<{col_widths[h]}}" for h in headers)
     print(header_line)
     print("-" * len(header_line))
 
-    # Print course rows
     for course in courses:
         row_data = [
             str(course.get('name', 'N/A')),
@@ -64,7 +55,6 @@ def display_courses(courses, title="Courses"):
     print("-" * len(header_line))
 
 
-# --- Main Client Logic ---
 def main(port):
     """Main function for the admin client."""
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -77,11 +67,9 @@ def main(port):
         print(f"[Error] Could not connect to server: {e}")
         sys.exit(1)
 
-    # --- Authentication ---
     logged_in = False
     while not logged_in:
         username = input("Enter admin username: ")
-        # Use getpass for password security
         password = getpass.getpass("Enter admin password: ")
 
         if not username or not password:
@@ -90,26 +78,23 @@ def main(port):
 
         response = send_request(client_socket, 'login_admin', {'username': username, 'password': password})
 
-        if response is None: # Handle connection error during login
+        if response is None:
              client_socket.close()
              sys.exit(1)
 
         if response.get('status') == 'success':
             print("\nAdmin login successful!")
             logged_in = True
-            # Display initial list of courses upon successful login
             courses = response.get('data', {}).get('courses', [])
             display_courses(courses, "Current Course List")
         else:
             print(f"[Login Failed] {response.get('message', 'Unknown error')}")
-            # Ask if user wants to retry
             retry = input("Try again? (y/n): ").lower()
             if retry != 'y':
                 client_socket.close()
                 sys.exit(0)
 
 
-    # --- Main Menu ---
     while True:
         print("\n--- Admin Menu ---")
         print("Commands:")
@@ -122,7 +107,6 @@ def main(port):
         command_input = input("> ").strip().lower()
         parts = command_input.split(maxsplit=1) # Split into command and potential argument
         command = parts[0] if parts else ""
-        # We might need more parts for some commands, handle later
         argument = parts[1] if len(parts) > 1 else None
 
         if command == 'list' and argument == 'courses':
@@ -135,7 +119,6 @@ def main(port):
         elif command == 'create' and argument == 'course':
             try:
                 name = input("Enter course name: ").strip()
-                # Example schedule format: MWF 10:00-11:00 or TR 14:00-15:30
                 schedule = input("Enter schedule (e.g., MWF 10:00-11:00): ").strip()
                 capacity_str = input("Enter maximum capacity: ").strip()
                 if not name or not schedule or not capacity_str:
@@ -153,7 +136,6 @@ def main(port):
                 })
                 if response:
                     print(f"[{response.get('status', 'error').upper()}] {response.get('message', 'No message received')}")
-                    # Refresh course list on success
                     if response.get('status') == 'success':
                         list_resp = send_request(client_socket, 'list_courses_admin')
                         if list_resp and list_resp.get('status') == 'success':
@@ -172,7 +154,7 @@ def main(port):
                 if not name or not new_capacity_str:
                     print("Course name and new capacity are required.")
                     continue
-                new_capacity = int(new_capacity_str) # Let potential ValueError be caught
+                new_capacity = int(new_capacity_str)
 
                 response = send_request(client_socket, 'update_course', {
                     'name': name,
@@ -180,7 +162,6 @@ def main(port):
                 })
                 if response:
                     print(f"[{response.get('status', 'error').upper()}] {response.get('message', 'No message received')}")
-                    # Refresh course list on success
                     if response.get('status') == 'success':
                         list_resp = send_request(client_socket, 'list_courses_admin')
                         if list_resp and list_resp.get('status') == 'success':
@@ -196,7 +177,6 @@ def main(port):
             try:
                 name = input("Enter student's full name: ").strip()
                 username = input("Enter student's username: ").strip()
-                # Use getpass for password security
                 password = getpass.getpass("Enter student's password: ")
                 confirm_password = getpass.getpass("Confirm student's password: ")
 
@@ -221,13 +201,12 @@ def main(port):
 
         elif command == 'logout':
             print("Logging out...")
-            send_request(client_socket, 'logout') # Inform server
-            break # Exit the loop
+            send_request(client_socket, 'logout')
+            break
 
         else:
             print("Invalid command. Please use one of the commands listed above.")
 
-    # --- Cleanup ---
     print("Closing connection.")
     client_socket.close()
     sys.exit(0)
@@ -247,3 +226,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting...")
         sys.exit(0)
+        
