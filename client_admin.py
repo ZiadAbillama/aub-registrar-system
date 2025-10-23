@@ -1,7 +1,7 @@
 import socket
 import json
 import sys
-import getpass 
+import getpass
 
 SERVER_HOST = '127.0.0.1'
 BUFFER_SIZE = 4096
@@ -24,7 +24,6 @@ def send_request(sock, action, data=None):
         return None
 
 def display_courses(courses, title="Courses"):
-    """Prints a formatted list of courses."""
     print(f"\n--- {title} ---")
     if not courses:
         print("No courses to display.")
@@ -54,9 +53,7 @@ def display_courses(courses, title="Courses"):
 
     print("-" * len(header_line))
 
-
 def main(port):
-    """Main function for the admin client."""
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
@@ -79,8 +76,8 @@ def main(port):
         response = send_request(client_socket, 'login_admin', {'username': username, 'password': password})
 
         if response is None:
-             client_socket.close()
-             sys.exit(1)
+            client_socket.close()
+            sys.exit(1)
 
         if response.get('status') == 'success':
             print("\nAdmin login successful!")
@@ -94,7 +91,6 @@ def main(port):
                 client_socket.close()
                 sys.exit(0)
 
-
     while True:
         print("\n--- Admin Menu ---")
         print("Commands:")
@@ -105,7 +101,7 @@ def main(port):
         print("  logout                - Exit the application")
 
         command_input = input("> ").strip().lower()
-        parts = command_input.split(maxsplit=1) # Split into command and potential argument
+        parts = command_input.split(maxsplit=1)
         command = parts[0] if parts else ""
         argument = parts[1] if len(parts) > 1 else None
 
@@ -122,9 +118,9 @@ def main(port):
                 schedule = input("Enter schedule (e.g., MWF 10:00-11:00): ").strip()
                 capacity_str = input("Enter maximum capacity: ").strip()
                 if not name or not schedule or not capacity_str:
-                     print("All fields are required.")
-                     continue
-                capacity = int(capacity_str) # Let potential ValueError be caught
+                    print("All fields are required.")
+                    continue
+                capacity = int(capacity_str)
                 if capacity <= 0:
                     print("Capacity must be a positive number.")
                     continue
@@ -139,16 +135,15 @@ def main(port):
                     if response.get('status') == 'success':
                         list_resp = send_request(client_socket, 'list_courses_admin')
                         if list_resp and list_resp.get('status') == 'success':
-                           display_courses(list_resp.get('data', {}).get('courses', []), "Updated Course List")
+                            display_courses(list_resp.get('data', {}).get('courses', []), "Updated Course List")
 
             except ValueError:
                 print("[Error] Invalid capacity. Please enter a number.")
             except Exception as e:
-                 print(f"[Error] Could not create course: {e}")
-
+                print(f"[Error] Could not create course: {e}")
 
         elif command == 'update' and argument == 'course':
-             try:
+            try:
                 name = input("Enter course name to update: ").strip()
                 new_capacity_str = input("Enter new (increased) capacity: ").strip()
                 if not name or not new_capacity_str:
@@ -165,13 +160,12 @@ def main(port):
                     if response.get('status') == 'success':
                         list_resp = send_request(client_socket, 'list_courses_admin')
                         if list_resp and list_resp.get('status') == 'success':
-                           display_courses(list_resp.get('data', {}).get('courses', []), "Updated Course List")
+                            display_courses(list_resp.get('data', {}).get('courses', []), "Updated Course List")
 
-             except ValueError:
+            except ValueError:
                 print("[Error] Invalid capacity. Please enter a number.")
-             except Exception as e:
-                 print(f"[Error] Could not update course: {e}")
-
+            except Exception as e:
+                print(f"[Error] Could not update course: {e}")
 
         elif command == 'add' and argument == 'student':
             try:
@@ -196,8 +190,7 @@ def main(port):
                     print(f"[{response.get('status', 'error').upper()}] {response.get('message', 'No message received')}")
 
             except Exception as e:
-                 print(f"[Error] Could not add student: {e}")
-
+                print(f"[Error] Could not add student: {e}")
 
         elif command == 'logout':
             print("Logging out...")
@@ -210,7 +203,6 @@ def main(port):
     print("Closing connection.")
     client_socket.close()
     sys.exit(0)
-
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -226,4 +218,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting...")
         sys.exit(0)
-        
